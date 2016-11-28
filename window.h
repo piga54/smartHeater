@@ -42,7 +42,8 @@ private:
         QwtPlotCurve *curve;
 
         // layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
-        QVBoxLayout  *vLayout;  // vertical layout
+        QVBoxLayout  *vLayout1;  // vertical layout
+	QVBoxLayout  *vLayout2;
         QHBoxLayout  *hLayout;  // horizontal layout
 
         static const int plotDataSize = 100;

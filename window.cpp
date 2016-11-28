@@ -3,6 +3,9 @@
 #include <cmath>  // for sine stuff
 #include <QtGui>
 #include <QFont>
+#include <QLabel>
+
+
 //---------
 #include <stdio.h>
 #include <sys/types.h>
@@ -26,7 +29,7 @@ int ret;
 char buf[BUFSIZE];
 char tempBuf[5];
 
-fd = open("/sys/bus/w1/devices/28-001522141bee/w1_slave", O_RDONLY);
+fd = open("/sys/bus/w1/devices/28-0015230752ee/w1_slave", O_RDONLY);
 if(-1 == fd){
 perror("open device file error");
 return 1;
@@ -65,13 +68,21 @@ return result;
 //Window::Window() : gain(5), count(0)
 Window::Window():b(0.0)
 {
+//	setStyleSheet("QWidget {border-image: url(./water_background_by_baggs.png) }");
+	QLabel *label = new QLabel("<h2><i>Smart</i> \n"
+                           "<font color=red>Water Heater</font></h2>");
+	QGroupBox *buttonGroup = new QGroupBox("Choose Temperature");
+
 
         QPushButton *Button1 = new QPushButton("&20 C°");
         QPushButton *Button2 = new QPushButton("&40 C°");
         QPushButton *Button3 = new QPushButton("&60 C°");
-        QPushButton *quitButton = new QPushButton("&Quit");
+//        QPushButton *quitButton = new QPushButton("&Quit");
 
-        QObject::connect(quitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
+
+
+
+//        QObject::connect(quitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
         connect(Button1,SIGNAL(clicked()),SLOT(startProcess1()));
         connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
 	connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
@@ -82,9 +93,10 @@ Window::Window():b(0.0)
                 //yData[index] = gain * sin( M_PI * index/50 );
                 yData[index] = 10;
         }
-
         curve = new QwtPlotCurve;
         plot = new QwtPlot;
+
+
         // make a plot curve from the data and attach it to the plot
         curve->setSamples(xData, yData, plotDataSize);
         curve->attach(plot);
@@ -92,25 +104,39 @@ Window::Window():b(0.0)
         plot->replot();
         plot->show();
 
-        plot->setTitle(QString::fromUtf8("Smart Water Heater"));
+//        plot->setTitle(QString::fromUtf8("temperature in realtime"));
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature"));
 
 
         // set up the layout - knob above thermometer
-        vLayout = new QVBoxLayout;
+	vLayout1 = new QVBoxLayout;
+	vLayout1->addWidget(label);
 
-        vLayout->addWidget(Button1);
-        vLayout->addWidget(Button2);
-        vLayout->addWidget(Button3);
-        vLayout->addWidget(quitButton);
-
+        vLayout2 = new QVBoxLayout;
+        vLayout2->addWidget(Button1);
+        vLayout2->addWidget(Button2);
+        vLayout2->addWidget(Button3);
+//        vLayout2->addWidget(quitButton);
+	buttonGroup->setLayout(vLayout2);
+	vLayout1->addWidget(buttonGroup);
         // plot to the left of knob and thermometer
         hLayout = new QHBoxLayout;
-        hLayout->addLayout(vLayout);
+        hLayout->addLayout(vLayout1);
         hLayout->addWidget(plot);
 
         setLayout(hLayout);
+
+	label->setStyleSheet("QWidget {border-image: url(./drop-on-blue-background-world-water-day_1057-4153.jpg) }");
+	buttonGroup->setStyleSheet("QWidget {border-image: url(./PNG+-+element+-+fumaça+1.png) }");
+	plot->setStyleSheet("QWidget {border-image: url(./water_background_by_baggs.png) }");
+	Button1->setStyleSheet("QWidget {border-image: url(./blue-button-hi.png) }");
+        Button2->setStyleSheet("QWidget {border-image: url(./blue-button-hi.png) }");
+        Button3->setStyleSheet("QWidget {border-image: url(./blue-button-hi.png) }");
+//	Button1->setFixedSize(200,10);
+
+
+
         // This is a demo for a thread which can be
         // used to read from the ADC asynchronously.
         // At the moment it doesn't do anything else than
