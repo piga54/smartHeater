@@ -1,9 +1,7 @@
 #include "window.h"
-// #include "adcreader.h"
-#include <cmath>  // for sine stuff
+#include <cmath>
 #include <QtGui>
 #include <QFont>
-//---------
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -12,17 +10,14 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <bcm2835.h>
 #include <wiringPi.h>
 #define BUFSIZE 128
 #define PIN RPI_GPIO_P1_12
 double test (double *a)
 {
- double temp;
-//int i, j;
+double temp;
 int fd;
 int ret;
-//int sentinel=0;
 char buf[BUFSIZE];
 char tempBuf[5];
 
@@ -58,7 +53,7 @@ tempBuf[j] = buf[i+2+j];
 
 temp = (double)atoi(tempBuf) / 1000;
 *a = temp;
-double result = *a; 
+double result = *a;
 return result;
 }
 
@@ -143,20 +138,6 @@ void Window::timerEvent( QTimerEvent * )
         plot->replot();
 
 	printf("%.3f C\n",inVal);
-
- /*   if (bcm2835_init())
-    // Set the pin to be an output
-{    
-bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP);
-
-	if (inVal<=b){
-bcm2835_gpio_write(PIN, HIGH);
-}
-else{
-bcm2835_gpio_write(PIN, LOW);
-}
-}
-*/
 
 if (inVal<=b){
 digitalWrite(1,1);
