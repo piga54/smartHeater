@@ -7,7 +7,10 @@
 #include <qwt/qwt_plot_curve.h>
 
 #include <QBoxLayout>
-
+//#include <QTextEdit>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QPushButton>
 #include <qwidget.h>
 #include <qfont.h>
 
@@ -33,18 +36,31 @@ private slots:
         void startProcess1();
         void startProcess2();
 	void startProcess3();
+        void emergencyOff();
 
 
 private:
+        void createButtonsGroup();
+        void createControlHeater();
+        void createMonitoringHeater();
 //      QwtKnob      *knob;
 //      QwtThermo    *thermo;
         QwtPlot      *plot;
         QwtPlotCurve *curve;
+        QLineEdit    *reading;
+        QPushButton  *heaterLed;
+        QPushButton  *heaterOff;
 
-        // layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
-        QVBoxLayout  *vLayout;  // vertical layout
+        //Qt Groups
+        QGroupBox *buttonsGroup;
+        QGroupBox *heaterGroup;
+        QGroupBox *monitoringGroup;
+        // layout elements
+        QVBoxLayout  *vLayout1;  // vertical layout1
+        QVBoxLayout  *vLayout2;  // vertical layout2
         QHBoxLayout  *hLayout;  // horizontal layout
-
+        QHBoxLayout  *mainLayout;  // horizontal layout
+//        QHBoxLayout  *controlHeater  //horizontal layout
         static const int plotDataSize = 100;
 
         // data arrays for the plot
@@ -54,7 +70,7 @@ private:
 //      double gain;
 //      int count;
 	double b;
-
+        bool offHeaterControl;
 
 //      ADCreader *adcreader;
 };

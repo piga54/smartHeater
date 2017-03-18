@@ -57,23 +57,19 @@ return result;
 }
 
 //Window::Window() : gain(5), count(0)
-Window::Window():b(0.0)
+Window::Window():b(0.0), offHeaterControl(0)
 {
+        createButtonsGroup();
+        createMonitoringHeater();
+        createControlHeater();
+//        reading  = new QTextEdit;
+//        reading ->setText("Tempe C");
 
-        QPushButton *Button1 = new QPushButton("&20 C°");
-        QPushButton *Button2 = new QPushButton("&40 C°");
-        QPushButton *Button3 = new QPushButton("&60 C°");
-        QPushButton *quitButton = new QPushButton("&Quit");
 
-        QObject::connect(quitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
-        connect(Button1,SIGNAL(clicked()),SLOT(startProcess1()));
-        connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
-	connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
         // set up the initial plot data
         for( int index=0; index<plotDataSize; ++index )
         {
                 xData[index] = index;
-                //yData[index] = gain * sin( M_PI * index/50 );
                 yData[index] = 10;
         }
 
@@ -90,32 +86,72 @@ Window::Window():b(0.0)
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature"));
 
-
         // set up the layout - knob above thermometer
-        vLayout = new QVBoxLayout;
+       /* vLayout1 = new QVBoxLayout;
+        vLayout1->addWidget(Button1);
+        vLayout1->addWidget(Button2);
+        vLayout1->addWidget(Button3);
+        vLayout1->addWidget(reading);
+        vLayout1->addWidget(quitButton);
+*/
+        //set up the main layout
+        mainLayout = new QHBoxLayout;
+        //mainLayout->addLayout(vLayout1);
+        mainLayout->addWidget(heaterGroup);
+        mainLayout->addWidget(plot);
+        setLayout(mainLayout);
 
-        vLayout->addWidget(Button1);
-        vLayout->addWidget(Button2);
-        vLayout->addWidget(Button3);
-        vLayout->addWidget(quitButton);
 
         // plot to the left of knob and thermometer
-        hLayout = new QHBoxLayout;
-        hLayout->addLayout(vLayout);
-        hLayout->addWidget(plot);
 
-        setLayout(hLayout);
-        // This is a demo for a thread which can be
-        // used to read from the ADC asynchronously.
-        // At the moment it doesn't do anything else than
-        // running in an endless loop and which prints out "tick"
-        // every second.
-//      adcreader = new ADCreader();
-//      adcreader->start();
+       // setLayout(hLayout);
+}
+void Window::createButtonsGroup()
+{
+        buttonsGroup = new QGroupBox(tr("Buttons"));
+        QVBoxLayout *layout = new QVBoxLayout;
+        QPushButton *Button1 = new QPushButton(tr("20\260C"));
+        QPushButton *Button2 = new QPushButton(tr("40\260C"));
+        QPushButton *Button3 = new QPushButton(tr("60\260C"));
+
+        layout->addWidget(Button1);
+        layout->addWidget(Button2);
+        layout->addWidget(Button3);
+        buttonsGroup->setLayout(layout);
+
+        connect(Button1,SIGNAL(clicked()),SLOT(startProcess1()));
+        connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
+        connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
+}
+void Window::createControlHeater()
+{
+       heaterGroup = new QGroupBox(tr("Heater Control"));
+       QHBoxLayout *layout = new QHBoxLayout;
+       layout->addWidget(buttonsGroup);
+       layout->addWidget(monitoringGroup);
+       heaterGroup->setLayout(layout);
+}
+void Window::createMonitoringHeater()
+{
+       monitoringGroup = new QGroupBox(tr("Heater Monitoring"));
+       QVBoxLayout *layout = new QVBoxLayout;
+       reading = new QLineEdit;
+       layout->addWidget(reading);
+
+       heaterLed = new QPushButton(tr("OFF"));
+       heaterLed->setEnabled(false);
+       heaterLed->setStyleSheet("background-color: rgb(100,0,0)");
+       layout->addWidget(heaterLed);
+
+       heaterOff = new QPushButton(tr("TURN OFF"));
+       layout->addWidget(heaterOff);
+
+       monitoringGroup->setLayout(layout);
+       connect(heaterOff,SIGNAL(clicked()),SLOT(emergencyOff()));
 }
 
 Window::~Window() {
-        // tells the thread to no longer run its endless loop
+        // tells        connect(Button3,SIGNAL(clicked()),SLOT(startPro
 //      adcreader->quit();
         // wait until the run method has terminated
 //      adcreader->wait();
@@ -128,21 +164,28 @@ void Window::timerEvent( QTimerEvent * )
         double a;
         double inVal =test(&a);
 
+        QString s = QString::number(inVal);
         wiringPiSetup () ;
         pinMode (1, OUTPUT) ;
         // add the new input to the plot
         memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
         yData[plotDataSize-1] = inVal;
+        reading->setText(s);
         curve->setSamples(xData, yData, plotDataSize);
         plot->replot();
-
+        reading->show();
 	printf("%.3f C\n",inVal);
 
 if (inVal<=b){
 digitalWrite(1,1);
+heaterLed->setStyleSheet("background-color: rgb(255,0,0)");
+heaterLed->setText("ON");
 }
 else{
 digitalWrite(1,0);
+heaterLed->setStyleSheet("background-color: rgb(100,0,0)");
+heaterLed->setText("OFF");
+offHeaterControl = 0;
 }
 
 
@@ -169,5 +212,12 @@ void Window::startProcess3()
 {
 this->b=b;
 b=60.0;
+}
+
+void Window::emergencyOff()
+{
+this->offHeaterControl=offHeaterControl;
+offHeaterControl=1;
+b=0.0;
 }
 
