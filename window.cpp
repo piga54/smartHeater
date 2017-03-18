@@ -42,7 +42,6 @@ return 1;
 }
 }
 
-
 for(std::size_t i=0;i<sizeof(buf);i++){
 if(buf[i] == 116){ //instead of 116 it was 't'
 for(std::size_t j=0;j<sizeof(tempBuf);j++){
