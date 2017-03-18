@@ -22,7 +22,7 @@ static const uint qt_meta_data_Window[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -30,16 +30,18 @@ static const uint qt_meta_data_Window[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-       7,   23,   23,   23, 0x08,
-      24,   23,   23,   23, 0x08,
-      40,   23,   23,   23, 0x08,
-      56,   23,   23,   23, 0x08,
+       7,   24,   30,   30, 0x0a,
+      31,   30,   30,   30, 0x08,
+      47,   30,   30,   30, 0x08,
+      63,   30,   30,   30, 0x08,
+      79,   30,   30,   30, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Window[] = {
-    "Window\0startProcess1()\0\0startProcess2()\0"
+    "Window\0setLimit(double)\0limit\0\0"
+    "startProcess1()\0startProcess2()\0"
     "startProcess3()\0emergencyOff()\0"
 };
 
@@ -49,14 +51,14 @@ void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Q_ASSERT(staticMetaObject.cast(_o));
         Window *_t = static_cast<Window *>(_o);
         switch (_id) {
-        case 0: _t->startProcess1(); break;
-        case 1: _t->startProcess2(); break;
-        case 2: _t->startProcess3(); break;
-        case 3: _t->emergencyOff(); break;
+        case 0: _t->setLimit((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 1: _t->startProcess1(); break;
+        case 2: _t->startProcess2(); break;
+        case 3: _t->startProcess3(); break;
+        case 4: _t->emergencyOff(); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObjectExtraData Window::staticMetaObjectExtraData = {
@@ -91,9 +93,9 @@ int Window::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

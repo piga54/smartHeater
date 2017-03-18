@@ -1,14 +1,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-//#include <qwt/qwt_thermo.h>
-//#include <qwt/qwt_knob.h>
+#include <qwt/qwt_thermo.h>
+#include <qwt/qwt_knob.h>
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_plot_curve.h>
 
 #include <QBoxLayout>
-//#include <QTextEdit>
-#include <QLineEdit>
+#include <QLabel>
 #include <QGroupBox>
 #include <QPushButton>
 #include <qwidget.h>
@@ -28,8 +27,8 @@ public:
         ~Window();
 
         void timerEvent( QTimerEvent * );
-//public slots:
-//      void setGain(double gain);
+public slots:
+      void setLimit(double limit);
 
 // internal variables for the window class
 private slots:
@@ -37,17 +36,19 @@ private slots:
         void startProcess2();
 	void startProcess3();
         void emergencyOff();
+//        void setLimit();
 
 
 private:
         void createButtonsGroup();
         void createControlHeater();
         void createMonitoringHeater();
-//      QwtKnob      *knob;
-//      QwtThermo    *thermo;
+        QwtKnob      *knob;
+        QwtThermo    *thermo;
         QwtPlot      *plot;
         QwtPlotCurve *curve;
-        QLineEdit    *reading;
+        QLabel       *reading;
+        QLabel       *manual;
         QPushButton  *heaterLed;
         QPushButton  *heaterOff;
 
@@ -56,23 +57,21 @@ private:
         QGroupBox *heaterGroup;
         QGroupBox *monitoringGroup;
         // layout elements
-        QVBoxLayout  *vLayout1;  // vertical layout1
-        QVBoxLayout  *vLayout2;  // vertical layout2
-        QHBoxLayout  *hLayout;  // horizontal layout
+//        QVBoxLayout  *vLayout1;  // vertical layout1
+  //      QVBoxLayout  *vLayout2;  // vertical layout2
+    //    QHBoxLayout  *hLayout;  // horizontal layout
         QHBoxLayout  *mainLayout;  // horizontal layout
-//        QHBoxLayout  *controlHeater  //horizontal layout
+
         static const int plotDataSize = 100;
 
         // data arrays for the plot
         double xData[plotDataSize];
         double yData[plotDataSize];
 
-//      double gain;
-//      int count;
 	double b;
         bool offHeaterControl;
+        double limit;
 
-//      ADCreader *adcreader;
 };
 
 #endif // WINDOW_H
