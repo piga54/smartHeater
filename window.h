@@ -51,6 +51,7 @@ private:
         QwtPlot      *plot;
         QwtPlotCurve *curve;
         QLabel       *reading;
+	QLabel       *space;
         QLabel       *manual;
         QPushButton  *heaterLed;
         QPushButton  *heaterOff;

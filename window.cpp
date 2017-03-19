@@ -79,8 +79,8 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
 
         plot->replot();
         plot->show();
-
-        plot->setTitle(QString::fromUtf8("Smart Water Heater"));
+        plot->setTitle(QString::fromUtf8("<h2><i>Smart </i>"
+"<font color=red>Water Heater</font></h2>"));
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature C"));
 //	plot->setAxisScale(QwtPlot::xBottom, 0, 60);
@@ -90,11 +90,15 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
         mainLayout->addWidget(panelGroup);
         mainLayout->addWidget(plot);
         setLayout(mainLayout);
+
+	//set background
+	plot->setStyleSheet("QWidget {border-image: url(./pic/water_background_by_baggs.png) }");
+
 }
 
 void Window::createAutomaticControlGroup()
 {
-        automaticControlGroup = new QGroupBox(tr("Automatic Control"));
+        automaticControlGroup = new QGroupBox(tr("Auto Control"));
         QVBoxLayout *layout = new QVBoxLayout;
         QPushButton *ButtonOff = new QPushButton(tr("TURN OFF"));
         QPushButton *Button1 = new QPushButton(tr("20\260C"));
@@ -112,12 +116,20 @@ void Window::createAutomaticControlGroup()
         connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
         connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
 
+	Button1->setStyleSheet("QWidget {border-image: url(./pic/1322493767359492846blue-button-no-text-hi-hi.png) }");
+	Button2->setStyleSheet("QWidget {border-image: url(./pic/1322493767359492846blue-button-no-text-hi-hi.png) }");
+	Button3->setStyleSheet("QWidget {border-image: url(./pic/1322493767359492846blue-button-no-text-hi-hi.png) }");
+	ButtonOff->setStyleSheet("QWidget {border-image: url(./pic/1322493767359492846blue-button-no-text-hi-hi.png) }");
+
+	automaticControlGroup->setStyleSheet("QGroupBox {border-image: url(./pic/white-blue.jpg)} ");
+
 }
 
 void Window::createManualControlGroup()
 {
         manualControlGroup = new QGroupBox(tr("Manual Control"));
         QVBoxLayout *layout = new QVBoxLayout;
+	manualControlGroup->setStyleSheet("QGroupBox {border-image: url(./pic/white-blue.jpg)} ");
         knob = new QwtKnob;
         knob->setRange(0,80);
         knob->setKnobWidth(30);
@@ -126,11 +138,14 @@ void Window::createManualControlGroup()
         layout->addWidget(knob);
 
         manual = new QLabel;
-        manual->setStyleSheet("background-color: rgb(255,255,255)");
+       // manual->setStyleSheet("background-color: rgb(255,255,255)");
         layout->addWidget(manual);
         manualControlGroup->setLayout(layout);
 
         connect(knob, SIGNAL(valueChanged(double)), SLOT(setLimit(double)));
+
+	//set background
+//	manualControlGroup->setStyleSheet("border-image: url(./pic/13042073-Drop-of-water-logo-Stock-Vector.jpg) ");
 }
 
 
@@ -138,14 +153,21 @@ void Window::createMonitoringGroup()
 {
        monitoringGroup = new QGroupBox(tr("Monitor"));
        QVBoxLayout *layout = new QVBoxLayout;
-       reading = new QLabel;
-       reading->setStyleSheet("background-color: rgb(255,255,255)");
-       layout->addWidget(reading);
+//	monitoringGroup->setStyleSheet("QWidget {border-image: url(./pic/white-blue.jpg)} ");
+
+
+	space =new QLabel;
+	layout->addWidget(space);
 
        heaterLed = new QPushButton(tr("OFF"));
        heaterLed->setEnabled(false);
        heaterLed->setStyleSheet("background-color: rgb(100,0,0)");
        layout->addWidget(heaterLed);
+
+       reading = new QLabel;
+//       reading->setStyleSheet("background-color: rgb(255,255,255)");
+       layout->addWidget(reading);
+
 
        thermo = new QwtThermo;
        thermo->setFillBrush( QBrush(Qt::red) );
@@ -154,11 +176,13 @@ void Window::createMonitoringGroup()
        layout->addWidget(thermo);
 
        monitoringGroup->setLayout(layout);
+
+	monitoringGroup->setStyleSheet("QGroupBox {border-image: url(./pic/white-blue.jpg)} ");
 }
 
 void Window::createControlHeater()
 {
-        controlHeater = new QGroupBox(tr("Control Heater"));
+        controlHeater = new QGroupBox;
         QVBoxLayout *layout = new QVBoxLayout;
         layout->addWidget(automaticControlGroup);
         layout->addWidget(manualControlGroup);
