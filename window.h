@@ -67,10 +67,10 @@ private:
         double xData[plotDataSize];
         double yData[plotDataSize];
 
-	double b;                 //Global variable for setting the temperature limit by buttons
+	double b,c;                 //Global variable for setting the temperature limit by buttons
         bool offHeaterControl;    //Global variable used as a flag for turning off the Heater
         double limit; 		  //Global variable for setting the temperature limit by the knob
-
+	bool flag;
 };
 
 #endif // WINDOW_H

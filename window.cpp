@@ -60,7 +60,7 @@ double result = *a;
 return result;
 }
 
-Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
+Window::Window():b(0.0), c(0.0), offHeaterControl(0), limit(0.0)
 {
 	//These functions creates all the GUI elements except the main Layout
         createAutomaticControlGroup();
@@ -226,17 +226,21 @@ void Window::timerEvent( QTimerEvent * )
 	thermo->setValue(inVal);		//Display current temperature in thermometer
 	printf("%.3f C\n",inVal);		//Print current temperature in terminal
 
-//Turning ON/OFF Heater according the current limit
-if (inVal<=b){
-digitalWrite(1,1);				//Turn on the Heater
+//Turn ON Heater according the current limit -5
+if (inVal<b-5){
+digitalWrite(1,1);			                     //Turn on the Heater
 heaterLed->setStyleSheet("background-color: rgb(255,0,0)");  //Turn on heaterLed
 heaterLed->setText("ON");
 }
-else{
-digitalWrite(1,0);				//Turn off the Heater
-heaterLed->setStyleSheet("background-color: rgb(100,0,0)");  //Turn off heaterLed
+
+//Turn OFF the Heater if the temperature is greater than current limit -5 or
+//Temperature is greater than difference
+if((inVal>=b-5) || (inVal>=c)){
+digitalWrite(1,0);                              //Turn off the Heater
+heaterLed->setStyleSheet("background-color: rgb(100,0,0)");  //Turn off heaterL$
 heaterLed->setText("OFF");
-offHeaterControl = 0;				//Reset the control signal
+offHeaterControl = 0;                           //Reset the control signal
+c=b;						//difference is set equal to  dont affect the turning off behaviour
 }
 
 }
@@ -245,8 +249,29 @@ offHeaterControl = 0;				//Reset the control signal
 void Window::startProcess1()
 {
 this->b=b;
+//Set temperature's limit (Button1)
 b=20.0;
 limit=0;
+//This value will be a temperature's limit depending on how far is the current
+//Temperature from the desire temperature
+c=20;
+
+//Set point for taking current temperature's value
+double a;
+double smartL =test(&a);
+double rest;
+
+//Cases for temeprature's limit
+rest = b-smartL;
+if (rest<=5){
+c=b-2.5;
+}
+else if(rest>5 && rest<=10){
+c=b-7.5;
+}
+else{
+c=b-12.5;
+}
 }
 
 //Button2 function
@@ -255,6 +280,22 @@ void Window::startProcess2()
 this->b=b;
 b=40.0;
 limit=0;
+c=40;
+double a;
+double smartL =test(&a);                 //inVal takes the temperature's$
+double rest;
+
+rest = b-smartL;
+if (rest<=5){
+c=b-2.5;
+}
+else if(rest>5 && rest<=10){
+c=b-7.5;
+}
+else{
+c=b-12.5;
+}
+
 }
 
 //Button3 function
@@ -263,6 +304,23 @@ void Window::startProcess3()
 this->b=b;
 b=60.0;
 limit=0;
+c=60;
+
+double a;
+double smartL =test(&a);                 //inVal takes the temperature's$
+double rest;
+
+rest = b-smartL;
+if (rest<=5){
+c=b-2.5;
+}
+else if(rest>5 && rest<=10){
+c=b-7.5;
+}
+else{
+c=b-12.5;
+}
+
 }
 
 //This function is called for turning off the Heater no matter what
@@ -272,6 +330,7 @@ this->offHeaterControl=offHeaterControl;
 offHeaterControl=1;	//The control signal is activated
 b=0.0;
 limit=b;
+c=limit;
 knob->setValue(0);	//Knob is reset
 }
 
@@ -279,5 +338,6 @@ knob->setValue(0);	//Knob is reset
 void Window::setLimit(double limit)
 {
 this->limit=limit;
-b=limit;
+b=limit-5;
+
 }
