@@ -58,9 +58,11 @@ return result;
 
 Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
 {
-        createButtonsGroup();
-        createMonitoringHeater();
+        createAutomaticControlGroup();
+        createManualControlGroup();
+        createMonitoringGroup();
         createControlHeater();
+        createPanelGroup();
 
         // set up the initial plot data
         for( int index=0; index<plotDataSize; ++index )
@@ -81,17 +83,18 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
         plot->setTitle(QString::fromUtf8("Smart Water Heater"));
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature C"));
+//	plot->setAxisScale(QwtPlot::xBottom, 0, 60);
 
         //set up the main layout
         mainLayout = new QHBoxLayout;
-        mainLayout->addWidget(heaterGroup);
+        mainLayout->addWidget(panelGroup);
         mainLayout->addWidget(plot);
         setLayout(mainLayout);
 }
 
-void Window::createButtonsGroup()
+void Window::createAutomaticControlGroup()
 {
-        buttonsGroup = new QGroupBox(tr("Buttons"));
+        automaticControlGroup = new QGroupBox(tr("Automatic Control"));
         QVBoxLayout *layout = new QVBoxLayout;
         QPushButton *ButtonOff = new QPushButton(tr("TURN OFF"));
         QPushButton *Button1 = new QPushButton(tr("20\260C"));
@@ -102,9 +105,22 @@ void Window::createButtonsGroup()
         layout->addWidget(Button1);
         layout->addWidget(Button2);
         layout->addWidget(Button3);
+        automaticControlGroup->setLayout(layout);
 
-       	knob = new QwtKnob;
+        connect(ButtonOff,SIGNAL(clicked()),SLOT(emergencyOff()));
+        connect(Button1,SIGNAL(clicked()),SLOT(startProcess1()));
+        connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
+        connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
+
+}
+
+void Window::createManualControlGroup()
+{
+        manualControlGroup = new QGroupBox(tr("Manual Control"));
+        QVBoxLayout *layout = new QVBoxLayout;
+        knob = new QwtKnob;
         knob->setRange(0,80);
+        knob->setKnobWidth(30);
         //knob->setMarkerStyle(2);
         knob->setValue(limit);
         layout->addWidget(knob);
@@ -112,23 +128,13 @@ void Window::createButtonsGroup()
         manual = new QLabel;
         manual->setStyleSheet("background-color: rgb(255,255,255)");
         layout->addWidget(manual);
-        buttonsGroup->setLayout(layout);
+        manualControlGroup->setLayout(layout);
 
-        connect(ButtonOff,SIGNAL(clicked()),SLOT(emergencyOff()));
-        connect(Button1,SIGNAL(clicked()),SLOT(startProcess1()));
-        connect(Button2,SIGNAL(clicked()),SLOT(startProcess2()));
-        connect(Button3,SIGNAL(clicked()),SLOT(startProcess3()));
         connect(knob, SIGNAL(valueChanged(double)), SLOT(setLimit(double)));
 }
-void Window::createControlHeater()
-{
-       heaterGroup = new QGroupBox(tr("Heater Control"));
-       QHBoxLayout *layout = new QHBoxLayout;
-       layout->addWidget(buttonsGroup);
-       layout->addWidget(monitoringGroup);
-       heaterGroup->setLayout(layout);
-}
-void Window::createMonitoringHeater()
+
+
+void Window::createMonitoringGroup()
 {
        monitoringGroup = new QGroupBox(tr("Monitor"));
        QVBoxLayout *layout = new QVBoxLayout;
@@ -141,9 +147,6 @@ void Window::createMonitoringHeater()
        heaterLed->setStyleSheet("background-color: rgb(100,0,0)");
        layout->addWidget(heaterLed);
 
-      // heaterOff = new QPushButton(tr("TURN OFF"));
-       //layout->addWidget(heaterOff);
-
        thermo = new QwtThermo;
        thermo->setFillBrush( QBrush(Qt::red) );
        thermo->setRange(0, 100);
@@ -152,6 +155,27 @@ void Window::createMonitoringHeater()
 
        monitoringGroup->setLayout(layout);
 }
+
+void Window::createControlHeater()
+{
+        controlHeater = new QGroupBox(tr("Control Heater"));
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->addWidget(automaticControlGroup);
+        layout->addWidget(manualControlGroup);
+//	layout->addWidget(controlHeater);
+        controlHeater->setLayout(layout);
+
+}
+
+void Window::createPanelGroup()
+{
+       panelGroup = new QGroupBox(tr("Panel"));
+       QHBoxLayout *layout = new QHBoxLayout;
+       layout->addWidget(controlHeater);
+       layout->addWidget(monitoringGroup);
+       panelGroup->setLayout(layout);
+}
+
 
 Window::~Window() {
 //
@@ -222,6 +246,7 @@ this->offHeaterControl=offHeaterControl;
 offHeaterControl=1;
 b=0.0;
 limit=b;
+knob->setValue(0);
 }
 
 void Window::setLimit(double limit)

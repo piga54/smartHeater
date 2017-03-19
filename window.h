@@ -40,9 +40,12 @@ private slots:
 
 
 private:
-        void createButtonsGroup();
+        void createAutomaticControlGroup();
+        void createManualControlGroup();
+        void createMonitoringGroup();
         void createControlHeater();
-        void createMonitoringHeater();
+        void createPanelGroup();
+
         QwtKnob      *knob;
         QwtThermo    *thermo;
         QwtPlot      *plot;
@@ -53,9 +56,12 @@ private:
         QPushButton  *heaterOff;
 
         //Qt Groups
-        QGroupBox *buttonsGroup;
-        QGroupBox *heaterGroup;
+        QGroupBox *automaticControlGroup;
+        QGroupBox *manualControlGroup;
         QGroupBox *monitoringGroup;
+        QGroupBox *controlHeater;
+        QGroupBox *panelGroup;
+
         // layout elements
 //        QVBoxLayout  *vLayout1;  // vertical layout1
   //      QVBoxLayout  *vLayout2;  // vertical layout2
