@@ -79,20 +79,22 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
 
         plot->replot();
         plot->show();
-        plot->setTitle(QString::fromUtf8("<h2><i>Smart </i>"
-"<font color=red>Water Heater</font></h2>"));
+	plot->setStyleSheet("QWidget {border-image: url(./pic/water_background_by_baggs.png) }");
+
+//        plot->setTitle(QString("<h2><i>Smart </i>"
+//"<font color=red>Water Heater</font></h2>"));
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature C"));
 //	plot->setAxisScale(QwtPlot::xBottom, 0, 60);
 
         //set up the main layout
         mainLayout = new QHBoxLayout;
+	mainLayout->addWidget(plot);
         mainLayout->addWidget(panelGroup);
-        mainLayout->addWidget(plot);
         setLayout(mainLayout);
 
 	//set background
-	plot->setStyleSheet("QWidget {border-image: url(./pic/water_background_by_baggs.png) }");
+//	plot->setStyleSheet("QWidget {border-image: url(./pic/water_background_by_baggs.png) }");
 
 }
 
@@ -193,7 +195,7 @@ void Window::createControlHeater()
 
 void Window::createPanelGroup()
 {
-       panelGroup = new QGroupBox(tr("Panel"));
+       panelGroup = new QGroupBox(tr("Smart Water Heater"));
        QHBoxLayout *layout = new QHBoxLayout;
        layout->addWidget(controlHeater);
        layout->addWidget(monitoringGroup);

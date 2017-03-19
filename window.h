@@ -69,7 +69,7 @@ private:
     //    QHBoxLayout  *hLayout;  // horizontal layout
         QHBoxLayout  *mainLayout;  // horizontal layout
 
-        static const int plotDataSize = 100;
+        static const int plotDataSize = 60;
 
         // data arrays for the plot
         double xData[plotDataSize];
