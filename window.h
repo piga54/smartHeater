@@ -5,7 +5,6 @@
 #include <qwt/qwt_knob.h>
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_plot_curve.h>
-
 #include <QBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
@@ -13,9 +12,6 @@
 #include <qwidget.h>
 #include <qfont.h>
 
-// #include "adcreader.h"
-
-// class definition 'Window'
 class Window : public QWidget
 {
         // must include the Q_OBJECT macro for for the Qt signals/slots framework to work with this class
@@ -24,28 +20,27 @@ class Window : public QWidget
 public:
         Window(); // default constructor - called when a Window is declared without arguments
 
-        ~Window();
-
         void timerEvent( QTimerEvent * );
 public slots:
-      void setLimit(double limit);
+	void setLimit(double limit);  //This function allows to set a new limit by modifying the knob (Manual COntrol)
 
 // internal variables for the window class
 private slots:
-        void startProcess1();
-        void startProcess2();
-	void startProcess3();
-        void emergencyOff();
-//        void setLimit();
-
+        void startProcess1();  //Set the temperature limit to 20 C (Button1)
+        void startProcess2();  //Set the temperature limit to 40 C (Button2)
+	void startProcess3();  //Set the temperature limit to 60 C (Button3)
+        void emergencyOff();   //This function turns off the Heater no matter what (ButtonOff)
 
 private:
-        void createAutomaticControlGroup();
-        void createManualControlGroup();
-        void createMonitoringGroup();
-        void createControlHeater();
-        void createPanelGroup();
+	//These functions are for creating all the components in the GUI. The components are divided by groups(Qt Groups)
+        void createAutomaticControlGroup();  //In this function there are the buttons for an automatic control
+        void createManualControlGroup();     //The knob with its label are created here.
+        void createMonitoringGroup();        //The heater LED, the thermometer and its label are made in this function
+        void createControlHeater();          //This function makes the automaticGroup and manualGroup inside of controlHeater
+        void createPanelGroup();             //Thee panelGroup is created with this function and contains the ControlHeater
+					     //and the plot.
 
+	//Declaring pointers
         QwtKnob      *knob;
         QwtThermo    *thermo;
         QwtPlot      *plot;
@@ -56,17 +51,14 @@ private:
         QPushButton  *heaterLed;
         QPushButton  *heaterOff;
 
-        //Qt Groups
+        //Qt Groups. Each group is created inside of its own function
         QGroupBox *automaticControlGroup;
         QGroupBox *manualControlGroup;
         QGroupBox *monitoringGroup;
         QGroupBox *controlHeater;
         QGroupBox *panelGroup;
 
-        // layout elements
-//        QVBoxLayout  *vLayout1;  // vertical layout1
-  //      QVBoxLayout  *vLayout2;  // vertical layout2
-    //    QHBoxLayout  *hLayout;  // horizontal layout
+        //The main Layout which will contain all the GUI elements
         QHBoxLayout  *mainLayout;  // horizontal layout
 
         static const int plotDataSize = 60;
@@ -75,9 +67,9 @@ private:
         double xData[plotDataSize];
         double yData[plotDataSize];
 
-	double b;
-        bool offHeaterControl;
-        double limit;
+	double b;                 //Global variable for setting the temperature limit by buttons
+        bool offHeaterControl;    //Global variable used as a flag for turning off the Heater
+        double limit; 		  //Global variable for setting the temperature limit by the knob
 
 };
 
