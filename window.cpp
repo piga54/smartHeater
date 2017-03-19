@@ -216,7 +216,7 @@ void Window::timerEvent( QTimerEvent * )
         wiringPiSetup () ;			//Set up WiringPI library
         pinMode (1, OUTPUT) ;			//Set up GPIO 18 as OUTPUT
 
-        // add the new input to the plot
+        //Add new reading to the plot
         memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
         yData[plotDataSize-1] = inVal;
 
@@ -339,5 +339,5 @@ void Window::setLimit(double limit)
 {
 this->limit=limit;
 b=limit-5;
-
+c=0;
 }

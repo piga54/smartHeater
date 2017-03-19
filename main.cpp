@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
         // create the window
         Window window;
         window.showMaximized();
-        // call the window.timerEvent function every 40 ms
-        window.startTimer(40);
+        // call the window.timerEvent function every 50 ms
+        window.startTimer(50);
 
         // execute the application
         return app.exec();
