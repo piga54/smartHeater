@@ -16,7 +16,7 @@
 //test function gets the data from the sensor
 double test (double *a)
 {
-double temp;            //Heere is stored the temperature as a double
+double temp;            //Here is stored the temperature as a double
 int    openFile;	//It is needed to open the sensor
 int    reader;
 char   buffer[BUFSIZE];
@@ -55,7 +55,7 @@ stringTemp[j] = buffer[i+2+j];
 
 
 temp = (double)atoi(stringTemp) / 1000; //Conversion from char to double
-*a = temp;            //Pointer for using temperature in other function
+*a = temp;                              //Pointer for using temperature in other function
 double result = *a;
 return result;
 }
@@ -69,7 +69,7 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
         createControlHeater();
         createPanelGroup();
 
-        // set up the initial plot data
+        //Set up the initial plot data
         for( int index=0; index<plotDataSize; ++index )
         {
                 xData[index] = index;
@@ -78,7 +78,7 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
 
         curve = new QwtPlotCurve;
         plot = new QwtPlot;
-        // make a plot curve from the data and attach it to the plot
+        //Make a plot curve from the data and attach it to the plot
         curve->setSamples(xData, yData, plotDataSize);
         curve->attach(plot);
 
@@ -89,7 +89,7 @@ Window::Window():b(0.0), offHeaterControl(0), limit(0.0)
         plot->setAxisTitle(QwtPlot::xBottom,QString::fromUtf8("time"));
         plot->setAxisTitle(QwtPlot::yLeft,QString::fromUtf8("temperature C"));
 
-        //set up the main layout
+        //Set up the main layout
         mainLayout = new QHBoxLayout;	     //horizontal layout
 	mainLayout->addWidget(plot);         //set up the plot as first slot
         mainLayout->addWidget(panelGroup);   //set up the panelGroup as second slot
@@ -140,7 +140,7 @@ void Window::createManualControlGroup()
         knob->setRange(0,80);		//Knob range.
         knob->setKnobWidth(30);		//For reducing knob size
         knob->setValue(limit);		//Set up the knob value for the initialization
-        layout->addWidget(knob);	//Add the kno to the layout
+        layout->addWidget(knob);	//Add the knob to the layout
 
 	//Knob label creation. THe user can see the real knob's value
         manual = new QLabel;
