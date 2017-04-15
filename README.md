@@ -4,7 +4,7 @@ Smart Heater Water project made with Raspberry Pi. The aim of the project is con
 ## Libraries
 
 * [Qwt](http://qwt.sourceforge.net/). The Qwt library is based on Qt and is primarily useful for programs with a technical background.
-* [Wiring Pi](http://wiringpi.com/). This library is used for setting the GPIO in RaspberryPi.
+* [Wiring Pi](http://wiringpi.com/). This library is used for setting the GPIO in Raspberry Pi.
 
 ## Making it work
 
@@ -28,7 +28,7 @@ startx ./smartHeater
 
 ### Makefile
 
-Whenever a new **Makefile** is created (*qmake*) you need to modify it and add the WiringPi library in the *LIBS* line. The following code shows how it should be:
+Whenever a new **Makefile** is created (*qmake*) you need to modify it and add the Wiring Pi library in the *LIBS* line. The following code shows how it should be:
 
 ```
 LIBS          = $(SUBLIBS) -L/usr/lib/arm-linux-gnueabihf -lqwt -lm -lQtGui -lQtCore -lpthread -lbcm2835 -lwiringPi
