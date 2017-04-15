@@ -31,7 +31,7 @@ startx ./smartHeater
 Whenever a new **Makefile** is created (*qmake*) you need to modify it and add the Wiring Pi library in the *LIBS* line. The following code shows how it should be:
 
 ```
-LIBS          = $(SUBLIBS) -L/usr/lib/arm-linux-gnueabihf -lqwt -lm -lQtGui -lQtCore -lpthread -lbcm2835 -lwiringPi
+LIBS          = $(SUBLIBS) -L/usr/lib/arm-linux-gnueabihf -lqwt -lm -lQtGui -lQtCore -lpthread -lwiringPi
 ```
 
 ### Configuring a new sensor
