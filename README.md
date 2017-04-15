@@ -8,11 +8,14 @@ Sensor's IDs
 Libraries for Makefile:
 LIBS          = $(SUBLIBS) -L/usr/lib/arm-linux-gnueabihf -lqwt -lm -lQtGui -lQtCore -lpthread -lbcm2835 -lwiringPi
 
-Making it work
+# Making it work
 
-To clone the git repository:
+To clone the git repository:__ saAS
 
-git clone https://github.com/piga54/smartHeater.git
+## DSWSSSaAS
+
+
+> git clone https://github.com/piga54/smartHeater.git
 
 To build:
 
@@ -23,7 +26,3 @@ make
 To run (assuming you are logged into the RPi over ssh and no X-server is running):
 
 startx ./smartHeater
-
-
-
-
