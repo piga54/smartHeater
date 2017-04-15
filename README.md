@@ -1,5 +1,5 @@
 # Smart Water Heater
-Smart Heater Water project made with Raspberry Pi. The aim of the project is controlling the temperature of a central Heater through a GUI and display it in real time. The control can be done by predefined temperatures or manually according to user need.
+Smart Heater Water project was made with Raspberry Pi. The aim of the project is controlling the temperature of a central Heater through a GUI and display it in real time. The control can be done by predefined temperatures or manually according to user need.
 
 ## Libraries
 
