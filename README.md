@@ -45,7 +45,7 @@ nano window.cpp
 
 And modify the following line with the new device where *28-001522141bee* is the current device name:
 
-```
+```C++
 openFile = open("/sys/bus/w1/devices/28-001522141bee/w1_slave", O_RDONLY);
 ```
 
